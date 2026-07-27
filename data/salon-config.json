@@ -1,0 +1,33 @@
+{
+  "salonName": "Salon Demo",
+  "tagline": "Забронируйте премиальный уход за собой",
+  "location": "Киев",
+  "currency": "UAH",
+  "timezone": "Europe/Kyiv",
+  "services": [
+    { "id": "hair", "name": "Укладка волос", "durationMinutes": 60, "price": 800 },
+    { "id": "facial", "name": "Уход за лицом", "durationMinutes": 75, "price": 1200 },
+    { "id": "ritual", "name": "Полный ритуал", "durationMinutes": 150, "price": 2400 },
+    { "id": "massage", "name": "Массаж", "durationMinutes": 60, "price": 1000 }
+  ],
+  "specialists": [
+    { "id": "anna", "name": "Анна", "serviceIds": ["hair", "facial", "ritual", "massage"] },
+    { "id": "marco", "name": "Марк", "serviceIds": ["hair", "ritual"] },
+    { "id": "lisa", "name": "Лиза", "serviceIds": ["facial", "ritual", "massage"] },
+    { "id": "rita", "name": "Рита", "serviceIds": ["hair", "facial"] }
+  ],
+  "workingHours": {
+    "mon": { "open": "10:00", "close": "19:00" },
+    "tue": { "open": "10:00", "close": "19:00" },
+    "wed": { "open": "10:00", "close": "19:00" },
+    "thu": { "open": "10:00", "close": "19:00" },
+    "fri": { "open": "10:00", "close": "19:00" },
+    "sat": { "open": "10:00", "close": "16:00" },
+    "sun": { "closed": true }
+  },
+  "faq": [
+    { "q": "Где вы находитесь?", "a": "Киев, ул. Примерная 1" },
+    { "q": "Можно ли отменить запись?", "a": "Да, за 3 часа до визита — просто напишите нам в чате" },
+    { "q": "Какие способы оплаты?", "a": "Наличные и карта на месте, онлайн-оплата скоро появится" }
+  ]
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "serviceId": "hair",
+    "serviceName": "Укладка волос",
+    "specialistId": "anna",
+    "specialistName": "Анна",
+    "clientName": "Ирина",
+    "clientContact": "+380662908789",
+    "date": "2026-07-27",
+    "startTime": "10:30",
+    "endTime": "11:30",
+    "status": "confirmed",
+    "createdAt": "2026-07-27T14:27:34.558Z"
+  }
+]
