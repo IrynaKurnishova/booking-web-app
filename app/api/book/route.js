@@ -7,7 +7,7 @@ export async function POST(request) {
   const { serviceId, specialistId, date, time, clientName, clientContact } = body;
 
   if (!serviceId || !specialistId || !date || !time || !clientName) {
-    return NextResponse.json({ error: "Не хватает обязательных полей" }, { status: 400 });
+    return NextResponse.json({ error: "Не вистачає обов'язкових полів" }, { status: 400 });
   }
 
   const config = loadSalonConfig();

@@ -11,7 +11,7 @@ export default function HomePage() {
       <p className="text-lg text-ink/70 mb-1">{config.tagline}</p>
       <p className="text-sm text-ink/50 mb-10">Beauty · {config.location}</p>
 
-      <h2 className="text-sm uppercase tracking-widest text-ink/50 mb-4">Наши услуги</h2>
+      <h2 className="text-sm uppercase tracking-widest text-ink/50 mb-4">Наші послуги</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
         {config.services.map((s) => (
           <Link
@@ -21,7 +21,7 @@ export default function HomePage() {
           >
             <div className="font-medium">{s.name}</div>
             <div className="text-sm text-ink/50">
-              от {s.price} {config.currency}
+              від {s.price} {config.currency}
             </div>
           </Link>
         ))}
@@ -32,13 +32,13 @@ export default function HomePage() {
           href="/booking"
           className="rounded-full bg-ink text-cream px-6 py-3 text-center hover:opacity-90 transition"
         >
-          Записаться
+          Записатися
         </Link>
         <Link
           href="/chat"
           className="rounded-full border border-ink px-6 py-3 text-center hover:bg-ink hover:text-cream transition"
         >
-          Спросить ИИ-ассистента
+          Запитати ІІ-асистента
         </Link>
       </div>
     </div>

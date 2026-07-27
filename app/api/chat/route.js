@@ -5,14 +5,14 @@ import { runChat } from "../../../lib/llmAgent.js";
 export async function POST(request) {
   if (!process.env.ANTHROPIC_API_KEY) {
     return NextResponse.json(
-      { error: "ANTHROPIC_API_KEY не задан на сервере (.env.local)" },
+      { error: "ANTHROPIC_API_KEY не заданий на сервері (.env.local)" },
       { status: 500 }
     );
   }
 
   const { messages } = await request.json();
   if (!Array.isArray(messages) || messages.length === 0) {
-    return NextResponse.json({ error: "messages обязателен и не должен быть пустым" }, { status: 400 });
+    return NextResponse.json({ error: "messages обов'язковий і не повинен бути порожнім" }, { status: 400 });
   }
 
   const config = loadSalonConfig();
@@ -21,6 +21,6 @@ export async function POST(request) {
     return NextResponse.json({ reply });
   } catch (err) {
     console.error(err);
-    return NextResponse.json({ error: "Ошибка ассистента, попробуйте ещё раз" }, { status: 500 });
+    return NextResponse.json({ error: "Помилка асистента, спробуйте ще раз" }, { status: 500 });
   }
 }

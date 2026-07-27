@@ -6,7 +6,7 @@ export default function ServicesPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
-      <h1 className="font-serif text-2xl mb-8">Услуги</h1>
+      <h1 className="font-serif text-2xl mb-8">Послуги</h1>
       <div className="space-y-3">
         {config.services.map((s) => {
           const specialists = config.specialists.filter((sp) => sp.serviceIds.includes(s.id));
@@ -19,7 +19,7 @@ export default function ServicesPage() {
               <div>
                 <div className="font-medium">{s.name}</div>
                 <div className="text-sm text-ink/50">
-                  {s.durationMinutes} мин · {specialists.map((sp) => sp.name).join(", ")}
+                  {s.durationMinutes} хв · {specialists.map((sp) => sp.name).join(", ")}
                 </div>
               </div>
               <div className="text-clay font-medium">

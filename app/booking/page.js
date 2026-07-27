@@ -8,7 +8,7 @@ export default async function BookingPage({ searchParams }) {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
-      <h1 className="font-serif text-2xl mb-8">Забронировать визит</h1>
+      <h1 className="font-serif text-2xl mb-8">Забронювати візит</h1>
       <BookingClient config={config} initialServiceId={initialServiceId} />
     </div>
   );

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 const WEEKDAY_KEYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
-const WEEKDAY_LABELS = ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
+const WEEKDAY_LABELS = ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
 
 function toDateKey(d) {
   const y = d.getFullYear();
@@ -89,7 +89,7 @@ export default function BookingClient({ config, initialServiceId }) {
         }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Не удалось создать запись");
+      if (!res.ok) throw new Error(data.error || "Не вдалося створити запис");
       setConfirmedBooking(data.booking);
       setStatus("success");
     } catch (err) {
@@ -101,11 +101,11 @@ export default function BookingClient({ config, initialServiceId }) {
   if (status === "success" && confirmedBooking) {
     return (
       <div className="rounded-2xl border border-clay bg-white/70 p-6">
-        <div className="text-clay font-medium mb-2">Запись подтверждена</div>
+        <div className="text-clay font-medium mb-2">Запис підтверджено</div>
         <p className="text-ink/80">
-          {confirmedBooking.serviceName} у мастера {confirmedBooking.specialistName}
+          {confirmedBooking.serviceName} у майстра {confirmedBooking.specialistName}
           <br />
-          {confirmedBooking.date} в {confirmedBooking.startTime}
+          {confirmedBooking.date} о {confirmedBooking.startTime}
         </p>
       </div>
     );
@@ -114,7 +114,7 @@ export default function BookingClient({ config, initialServiceId }) {
   return (
     <div className="space-y-8">
       <div>
-        <label className="text-sm uppercase tracking-widest text-ink/50 block mb-3">Услуга</label>
+        <label className="text-sm uppercase tracking-widest text-ink/50 block mb-3">Послуга</label>
         <div className="flex flex-wrap gap-2">
           {config.services.map((s) => (
             <button
@@ -126,14 +126,14 @@ export default function BookingClient({ config, initialServiceId }) {
                   : "border-ink/20 hover:border-clay"
               }`}
             >
-              {s.name} · {s.durationMinutes} мин
+              {s.name} · {s.durationMinutes} хв
             </button>
           ))}
         </div>
       </div>
 
       <div>
-        <label className="text-sm uppercase tracking-widest text-ink/50 block mb-3">Мастер</label>
+        <label className="text-sm uppercase tracking-widest text-ink/50 block mb-3">Майстер</label>
         <div className="flex gap-3">
           {eligibleSpecialists.map((sp) => (
             <button
@@ -157,7 +157,7 @@ export default function BookingClient({ config, initialServiceId }) {
 
       <div>
         <label className="text-sm uppercase tracking-widest text-ink/50 block mb-3">
-          Дата · {today.toLocaleString("ru-RU", { month: "long", year: "numeric" })}
+          Дата · {today.toLocaleString("uk-UA", { month: "long", year: "numeric" })}
         </label>
         <div className="grid grid-cols-7 gap-1 text-center text-xs mb-2 text-ink/40">
           {WEEKDAY_LABELS.map((d) => (
@@ -194,10 +194,10 @@ export default function BookingClient({ config, initialServiceId }) {
 
       {selectedDate && (
         <div>
-          <label className="text-sm uppercase tracking-widest text-ink/50 block mb-3">Свободное время</label>
-          {loadingSlots && <p className="text-sm text-ink/50">Загрузка...</p>}
+          <label className="text-sm uppercase tracking-widest text-ink/50 block mb-3">Вільний час</label>
+          {loadingSlots && <p className="text-sm text-ink/50">Завантаження...</p>}
           {!loadingSlots && slots.length === 0 && (
-            <p className="text-sm text-ink/50">На эту дату свободных слотов нет — выберите другой день.</p>
+            <p className="text-sm text-ink/50">На цю дату вільних слотів немає — оберіть інший день.</p>
           )}
           <div className="flex flex-wrap gap-2">
             {slots.map((t) => (
@@ -220,13 +220,13 @@ export default function BookingClient({ config, initialServiceId }) {
           <input
             value={clientName}
             onChange={(e) => setClientName(e.target.value)}
-            placeholder="Ваше имя"
+            placeholder="Ваше ім'я"
             className="w-full rounded-lg border border-ink/15 px-4 py-2 bg-white"
           />
           <input
             value={clientContact}
             onChange={(e) => setClientContact(e.target.value)}
-            placeholder="Телефон или Telegram (необязательно)"
+            placeholder="Телефон або Telegram (необов'язково)"
             className="w-full rounded-lg border border-ink/15 px-4 py-2 bg-white"
           />
           {status === "error" && <p className="text-sm text-red-600">{errorMsg}</p>}
@@ -235,7 +235,7 @@ export default function BookingClient({ config, initialServiceId }) {
             disabled={!clientName || status === "submitting"}
             className="w-full rounded-full bg-ink text-cream px-6 py-3 disabled:opacity-40"
           >
-            {status === "submitting" ? "Записываем..." : "Подтвердить запись"}
+            {status === "submitting" ? "Записуємо..." : "Підтвердити запис"}
           </button>
         </div>
       )}

@@ -3,15 +3,15 @@
 import { useState, useRef, useEffect } from "react";
 
 const QUICK_QUESTIONS = [
-  "Какие у вас услуги?",
-  "Какие цены?",
-  "Часы работы?",
-  "Как записаться?",
+  "Які у вас послуги?",
+  "Які ціни?",
+  "Години роботи?",
+  "Як записатися?",
 ];
 
 export default function ChatClient({ salonName }) {
   const [messages, setMessages] = useState([
-    { role: "assistant", content: `Здравствуйте! Я ассистент "${salonName}". Спросите об услугах, ценах или запишитесь на визит.` },
+    { role: "assistant", content: `Вітаю! Я асистент "${salonName}". Запитайте про послуги, ціни або запишіться на візит.` },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -37,10 +37,10 @@ export default function ChatClient({ salonName }) {
         body: JSON.stringify({ messages: nextMessages }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Ошибка");
+      if (!res.ok) throw new Error(data.error || "Помилка");
       setMessages((prev) => [...prev, { role: "assistant", content: data.reply }]);
     } catch (err) {
-      setMessages((prev) => [...prev, { role: "assistant", content: `Ошибка: ${err.message}` }]);
+      setMessages((prev) => [...prev, { role: "assistant", content: `Помилка: ${err.message}` }]);
     } finally {
       setLoading(false);
     }
@@ -53,8 +53,8 @@ export default function ChatClient({ salonName }) {
           AI
         </span>
         <div>
-          <div className="font-medium text-sm">Ассистент {salonName}</div>
-          <div className="text-xs text-ink/50">Всегда на связи</div>
+          <div className="font-medium text-sm">Асистент {salonName}</div>
+          <div className="text-xs text-ink/50">Завжди на зв'язку</div>
         </div>
       </div>
 
@@ -69,7 +69,7 @@ export default function ChatClient({ salonName }) {
             {m.content}
           </div>
         ))}
-        {loading && <div className="text-xs text-ink/40">Ассистент печатает...</div>}
+        {loading && <div className="text-xs text-ink/40">Асистент друкує...</div>}
       </div>
 
       {messages.length === 1 && (
@@ -91,7 +91,7 @@ export default function ChatClient({ salonName }) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && send()}
-          placeholder="Напишите сообщение..."
+          placeholder="Напишіть повідомлення..."
           className="flex-1 rounded-full border border-ink/15 px-4 py-2 text-sm bg-white"
         />
         <button

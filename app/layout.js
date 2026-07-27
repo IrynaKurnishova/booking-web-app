@@ -11,7 +11,7 @@ export default function RootLayout({ children }) {
   const config = loadSalonConfig();
 
   return (
-    <html lang="ru">
+    <html lang="uk">
       <body className="bg-cream text-ink min-h-screen flex flex-col">
         <header className="border-b border-ink/10">
           <div className="max-w-3xl mx-auto flex items-center justify-between px-6 py-4">
@@ -20,19 +20,19 @@ export default function RootLayout({ children }) {
             </Link>
             <nav className="flex gap-5 text-sm">
               <Link href="/" className="hover:text-clay">
-                Главная
+                Головна
               </Link>
               <Link href="/services" className="hover:text-clay">
-                Услуги
+                Послуги
               </Link>
               <Link href="/booking" className="hover:text-clay">
-                Запись
+                Запис
               </Link>
               <Link href="/chat" className="hover:text-clay">
                 Чат
               </Link>
               <Link href="/profile" className="hover:text-clay">
-                Профиль
+                Профіль
               </Link>
             </nav>
           </div>
