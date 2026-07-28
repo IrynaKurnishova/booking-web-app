@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { loadSalonConfig } from "../../../lib/config.js";
 import { createBooking } from "../../../lib/db.js";
+import { notifyOwnerAboutBooking } from "../../../lib/telegram.js";
 
 export async function POST(request) {
   const body = await request.json();
@@ -13,6 +14,7 @@ export async function POST(request) {
   const config = loadSalonConfig();
   try {
     const booking = await createBooking(config, { serviceId, specialistId, date, time, clientName, clientContact });
+    notifyOwnerAboutBooking(booking).catch(() => {});
     return NextResponse.json({ booking });
   } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 409 });
