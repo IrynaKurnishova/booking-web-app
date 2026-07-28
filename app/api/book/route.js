@@ -14,7 +14,7 @@ export async function POST(request) {
   const config = loadSalonConfig();
   try {
     const booking = await createBooking(config, { serviceId, specialistId, date, time, clientName, clientContact });
-    notifyOwnerAboutBooking(booking).catch(() => {});
+    await notifyOwnerAboutBooking(booking);
     return NextResponse.json({ booking });
   } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 409 });
