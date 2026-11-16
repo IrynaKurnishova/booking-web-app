@@ -8,7 +8,7 @@ The UI and the assistant are in Ukrainian.
 
 - **Step-by-step booking:** service → specialist → date → time → confirmation.
 - **Per-specialist availability:** free slots are calculated for each specialist separately, based on working hours, service duration and existing bookings.
-- **Conflict-safe bookings:** the overlap check and the insert run in a single Postgres transaction.
+- **Overlap check:** the conflict check and the insert run in a single Postgres transaction (an exclusion constraint is the next step for full race safety).
 - **AI assistant (Claude, tool use):** the model calls `get_available_slots` and `book_appointment` itself, knows the current date in the salon's timezone, and answers FAQ from the salon config.
 - **Telegram notifications:** the owner is notified about every new booking, whether it came from the form or the chat.
 - **Config-driven:** services, specialists, hours and FAQ live in one file, `data/salon-config.json`.
