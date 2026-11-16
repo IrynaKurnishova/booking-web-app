@@ -1,104 +1,69 @@
-# Prototype: Booking Website with AI Assistant
+# Salon Booking App with an AI Assistant
 
-A web version based on the example you showed (velvet-app-tau.vercel.app): homepage with a list of services → booking flow (specialist + date + time) → AI assistant chat → profile page (placeholder). The Telegram bot from the first prototype remains a separate additional channel and does not replace this web application.
+A booking web app for beauty salons, barbershops and spas. Clients can book through a step-by-step flow or simply chat with an AI assistant that checks availability and creates the booking on its own. The salon owner gets a Telegram notification for every new booking.
 
-**Tech stack:** Next.js (App Router) + Tailwind + Claude API. Built so that my wife, as a frontend developer, can continue working on it immediately — it is a standard React/Next.js project with no unusual dependencies or architecture.
+The UI and the assistant are in Ukrainian.
 
-Built and tested: `npm run build` completes without errors, and the backend logic (available slots, booking creation, conflict detection) has been tested and works correctly.
+## Features
 
-## Requirements
+- **Step-by-step booking:** service → specialist → date → time → confirmation.
+- **Per-specialist availability:** free slots are calculated for each specialist separately, based on working hours, service duration and existing bookings.
+- **Conflict-safe bookings:** the overlap check and the insert run in a single Postgres transaction.
+- **AI assistant (Claude, tool use):** the model calls `get_available_slots` and `book_appointment` itself, knows the current date in the salon's timezone, and answers FAQ from the salon config.
+- **Telegram notifications:** the owner is notified about every new booking, whether it came from the form or the chat.
+- **Config-driven:** services, specialists, hours and FAQ live in one file, `data/salon-config.json`.
 
-Node.js 18+ (https://nodejs.org, click the LTS version).
+## Tech stack
 
-## Setup
+- Next.js 15 (App Router), React 19, Tailwind CSS
+- PostgreSQL (hosted on Supabase, accessed through `pg`)
+- Anthropic Claude API (`@anthropic-ai/sdk`)
+- Telegram Bot API
+- Deployed on Vercel
 
-1. Run `npm install`
-2. Copy `.env.example` to `.env.local`:
+## Getting started
 
-   * `ANTHROPIC_API_KEY` (get it at https://console.anthropic.com → API Keys). Without it, everything works except the `/chat` page.
-   * `DATABASE_URL` — PostgreSQL connection string (see the section below). Without it, `/booking` and `/chat` (booking creation) will not work.
-3. Edit `data/salon-config.json` for your salon: business name, services, specialists (each specialist has their own list of services they can perform), business hours, and FAQ.
-4. Run `npm run dev` and open http://localhost:3000
+Requires Node.js 18+.
 
-## Database (PostgreSQL)
+```bash
+npm install
+cp .env.example .env.local   # fill in the values below
+npm run dev
+```
 
-Bookings are stored in PostgreSQL, not in a file, so the application works correctly after a serverless deployment.
+Open http://localhost:3000.
 
-The fastest way to get a free database:
+### Environment variables
 
-1. Sign up at https://supabase.com (or https://neon.tech) and create a project.
-2. Copy the connection string (Connection String, URI/pooling mode).
-3. Paste it into `DATABASE_URL` in `.env.local`.
+| Variable | Required | Description |
+| --- | --- | --- |
+| `DATABASE_URL` | yes | PostgreSQL connection string (Supabase or Neon, pooled URI) |
+| `ANTHROPIC_API_KEY` | for `/chat` | Key from https://console.anthropic.com |
+| `TELEGRAM_BOT_TOKEN` | optional | Bot token from @BotFather |
+| `TELEGRAM_OWNER_CHAT_ID` | optional | Chat ID that receives booking notifications |
 
-The `bookings` table is created automatically on the first request to `/api/availability` or `/api/book` — no manual migrations are required.
+The `bookings` table is created automatically on the first request, so no manual migration is needed.
 
-For local development, you can use the same cloud database project; a separate local database is optional.
+### Telegram notifications
 
-## Project Structure (Quick Overview)
+1. Create a bot with @BotFather and copy the token.
+2. Send any message to the bot from the owner's account.
+3. Open `https://api.telegram.org/bot<TOKEN>/getUpdates` and copy `chat.id`.
+4. Set both variables in `.env.local` (and in your hosting provider's settings).
 
-* `app/page.js` — homepage (services + “Book Now” / “Ask the AI Assistant” buttons)
-* `app/services/page.js` — services list
-* `app/booking/page.js` + `components/BookingClient.jsx` — service → specialist → date → time selection → confirmation form
-* `app/chat/page.js` + `components/ChatClient.jsx` — AI assistant chat
-* `app/api/availability`, `app/api/book`, `app/api/chat` — server-side logic (Route Handlers)
-* `lib/db.js` — available slot calculation and booking storage
-* `lib/llmAgent.js` — Claude API conversation engine with function calling (same two tools: check available slots and create a booking)
-* `lib/telegram.js` — Telegram notification for salon owners when a new booking is created
-* `data/salon-config.json` — the only place that needs customization for a specific salon
+Without these variables the app works as usual, just without notifications.
 
-## Telegram Notifications for the Salon Owner
+## Project structure
 
-For every new booking (whether made through the booking form or via chat), the salon owner can receive a Telegram notification.
+- `app/` — pages (`/`, `/services`, `/booking`, `/chat`, `/profile`) and API routes (`/api/availability`, `/api/book`, `/api/chat`)
+- `components/` — `BookingClient.jsx` (booking flow), `ChatClient.jsx` (chat UI)
+- `lib/db.js` — slot calculation and bookings in Postgres
+- `lib/llmAgent.js` — Claude agent with tool use
+- `lib/telegram.js` — owner notifications
+- `data/salon-config.json` — per-salon configuration
 
-Bookings will still be created normally without Telegram integration — notifications are optional. Without them, the only way to see new bookings is by checking the database manually.
+## Notes
 
-### Setup
-
-1. In Telegram, find **@BotFather**, send `/newbot`, and create a bot name and username (for example, `MySalonNotifyBot`). BotFather will return a token such as:
-
-   `123456789:AAExxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
-
-   This is your `TELEGRAM_BOT_TOKEN`.
-
-2. The salon owner (or you, for testing) should open a chat with the bot and send any message, such as `/start`.
-
-3. Get your `chat_id`:
-
-   * Open the following URL in your browser:
-
-     `https://api.telegram.org/bot<TOKEN>/getUpdates`
-
-     (replace `<TOKEN>` with your bot token).
-
-   * In the response, find:
-
-     `"chat":{"id": ...}`
-
-   * The number shown is your `TELEGRAM_OWNER_CHAT_ID`.
-
-4. Add both values to `.env.local` (and to Vercel Environment Variables when deploying).
-
-Done. From that point on, every new booking will generate a Telegram message containing the booking details (service, specialist, customer, date, and time).
-
-## Storage Status — Updated
-
-Previously, bookings were stored in a JSON file, which did not work on serverless hosting platforms (Vercel/Netlify) because the filesystem is ephemeral and changes do not persist between requests.
-
-Now `lib/db.js` uses PostgreSQL (see the “Database” section above). The functions `getAvailableSlots()` and `createBooking()` have been converted to asynchronous functions (`await`), while their signatures and the rest of the codebase (API routes and components) remain unchanged.
-
-The old `data/bookings.json` file is no longer used and can be deleted manually if desired.
-
-## Next Steps
-
-This is a milestone from the MVP phase of the roadmap (`roadmap_booking_ai_sng.md`):
-
-* Validate the workflow with 2–3 real pilot customers.
-* Add database deployment infrastructure.
-* Integrate local payments (LiqPay).
-* Implement multi-tenancy (multiple salons running on a single codebase instead of maintaining separate project copies for each salon).
-
-## Known Security Note
-
-When running `npm audit`, you may see high-severity warnings related to internal Next.js dependencies such as `sharp` or `postcss` (used for image optimization, although this prototype does not currently use images).
-
-These are relatively recent CVEs in the ecosystem at the time of development. Before deploying to production, review the results of `npm audit` and upgrade Next.js to the latest stable version.
+- Each salon currently runs as its own deployment with its own database and config. Multi-tenancy is not implemented.
+- Row Level Security is enabled on `bookings` as a lockdown for Supabase's public REST API. The app itself connects directly through `DATABASE_URL`.
+- Written in plain JavaScript.
